@@ -25,10 +25,22 @@ public class Board : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < boardFields.Count; i++)
+        int x = 0;
+        Transform[] allChildren = GetComponentsInChildren<Transform>();
+        foreach (Transform child in allChildren)
         {
-            boardFields[i].Set_Field_Number(i);
+            if (child.GetComponent<BoardField>() != null)
+            {
+                boardFields.Add(child.GetComponent<BoardField>());
+                child.GetComponent<BoardField>().Set_Field_Number(x);
+                x++;
+            }
         }
+
+        //for (int i = 0; i < boardFields.Count; i++)
+        //{
+        //    boardFields[i].Set_Field_Number(i);
+        //}
     }
 
     // Update is called once per frame

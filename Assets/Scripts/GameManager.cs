@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
     public void Roll_Dice(float delay)
     {
         DEBUGger.inst?.Set_Debug_Left("GameManager.Roll_Dice, delay: " + delay, Color.green);
-        StartCoroutine(DiceController.inst.Set_Dice_Rotation_Delayed(GetComponent<RandomGenerator>().GetRandomInt(1, 3), delay));
+        StartCoroutine(DiceController.inst.Set_Dice_Rotation_Delayed(GetComponent<RandomGenerator>().GetRandomInt(1, 6), delay));
     }
 
     /// <summary>Move Player, Called form diceDone event</summary>
