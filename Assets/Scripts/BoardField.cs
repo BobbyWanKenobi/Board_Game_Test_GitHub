@@ -1,26 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BoardField : MonoBehaviour
 {
     /*---------------------------------------------------------------------------------------------
     *  Attached to Board Fields
-    *  Manages Debugging display, Set "Editor only" for final
+    *  Manages Board fields number
     *--------------------------------------------------------------------------------------------*/
+
+    [Header("References")]
+    [SerializeField] TextMeshPro Text_No;
 
     [Header("Variables")]
     public int FieldNo = 0;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Set_Field_Number(int no)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        FieldNo = no;
+        Text_No.text = no.ToString();
     }
 }

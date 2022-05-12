@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class MovePawn : MonoBehaviour
+public class MovePlayer : MonoBehaviour
 {
     /*---------------------------------------------------------------------------------------------
     *  Attached to Player.
-    *  Holds references for all Board game fields
+    *  Manage Player motion
     *--------------------------------------------------------------------------------------------*/
+
+    [Header("References")]
+    [SerializeField] GameObject Pawn;
 
     [Header("Variables")]
     [SerializeField] Ease easeType;
@@ -19,6 +22,7 @@ public class MovePawn : MonoBehaviour
     int targetPos;
     bool moveINProgress = false;
     int fieldsCount;
+    float pos_Z_shift;
 
     //EVENTS
     public delegate void GameOver();
@@ -45,36 +49,25 @@ public class MovePawn : MonoBehaviour
         {
             Next_Step();
         }
-        else 
-        { 
-        
-        }
+
+        Animate_Pawn();
     }
 
-    //void Pawn_in_Motion()
-    //{
-    //    //calculate pawn animation
-    //    Vector3 posShift = GetPawnShift(StepCurrent + 1);
-
-    //    float tmpPawnDistance = Vector3.Distance(transform.position, GetBoardField(StepCurrent + 1).transform.position);
-    //    float yPos = Mathf.Sin((tmpPawnDistance / PawnDistance) * (Mathf.PI)) * 2f;
-    //    CubePawn.transform.localPosition = new Vector3(0, CubePawnBaseYpos + yPos, 0) + posShift;
-    //    CubePawn.transform.eulerAngles = new Vector3(yPos * 15f, 0, yPos * 5f);
-
-    //    //Debug.Log("tmpPawnDistance = " + tmpPawnDistance + "  > PawnDistance = " + PawnDistance + "  > yPos = " + yPos);
-
-    //    transform.position = Vector3.Lerp(transform.position, GetBoardField(StepCurrent + 1).transform.position, 7f * Time.deltaTime * debugSpeed);
-
-    //    //when pawn reach next game field
-    //    if (Vector3.Distance(transform.position, GetBoardField(StepCurrent + 1).transform.position) < 0.2f)
-    //    {
-    //        transform.position = GetBoardField(StepCurrent + 1).transform.position;
-    //        PawnDistance = Vector3.Distance(GetBoardField(StepCurrent).transform.position, GetBoardField(StepCurrent + 1).transform.position);
-
-    //        CubePawn.transform.position = transform.position + new Vector3(0, 1.2f, 0) + posShift;
-    //        CubePawn.transform.eulerAngles = new Vector3(0, 0, 0);
-    //    }
-    //}
+    void Animate_Pawn()
+    {
+        if (currentPos != targetPos)
+        {
+            //Animates Y motion
+            float tmpPawnDistance = Vector3.Distance(transform.position, Board.inst.Get_Field_Pos(nextPos));
+            float pawnDistance = Vector3.Distance(Board.inst.Get_Field_Pos(currentPos), Board.inst.Get_Field_Pos(nextPos));
+            float yPos = Mathf.Sin((tmpPawnDistance / pawnDistance) * (Mathf.PI)) * 0.7f;
+            Pawn.transform.localPosition = new Vector3(0.0f, yPos, pos_Z_shift);
+        }
+        else
+        {
+            Pawn.transform.localPosition = new Vector3(0.0f, 0, pos_Z_shift);
+        }
+    }
 
     /// <summary>Sets move Target</summary>
     /// <remarks></remarks>
@@ -154,5 +147,9 @@ public class MovePawn : MonoBehaviour
         targetPos = 0;
         transform.position = Board.inst.Get_Field_Pos(0);
         moveINProgress = false;
+        if (GetComponent<Player>().IsAI)
+            pos_Z_shift = -0.2f;
+        else
+            pos_Z_shift = 0.2f;
     }
 }

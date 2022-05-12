@@ -6,8 +6,8 @@ using DG.Tweening;
 public class DiceController : MonoBehaviour
 {
     /*---------------------------------------------------------------------------------------------
-    *  Attached to Canvas_UI
-    *  Manages Game
+    *  Attached to DiceController
+    *  Manages Dices
     *--------------------------------------------------------------------------------------------*/
 
     public static DiceController inst = null;
@@ -63,6 +63,8 @@ public class DiceController : MonoBehaviour
         
     }
 
+    /// <summary>Set Dice Type 1-6 or 5-10</summary>
+    /// <remarks></remarks>
     public void Set_Dice_Type(bool dice_5_10)
     {
         DEBUGger.inst?.Set_Debug_Left("DiceController. Set_Dice_Type, Dice_5_10: " + Dice_5_10 + "  > dice_5_10: " + dice_5_10, Color.blue);
@@ -105,6 +107,8 @@ public class DiceController : MonoBehaviour
         DiceReady = true;
     }
 
+    /// <summary>Set dice number with Delay</summary>
+    /// <remarks></remarks>
     public IEnumerator Set_Dice_Rotation_Delayed(int diceVal, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -112,6 +116,8 @@ public class DiceController : MonoBehaviour
         Set_Dice_Rotation(diceVal);
     }
 
+    /// <summary>Set dice number</summary>
+    /// <remarks></remarks>
     public void Set_Dice_Rotation(int diceVal)
     {
         if (!DiceReady)
@@ -123,7 +129,7 @@ public class DiceController : MonoBehaviour
 
         transform.rotation = new Quaternion(Random.Range(-3f, 3f), Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
 
-        transform.DOLocalRotate(diceRotAngles[diceVal - 1] + new Vector3(1440,0,0), 4f, RotateMode.FastBeyond360)
+        transform.DOLocalRotate(diceRotAngles[diceVal - 1] + new Vector3(1080,0,0), 3f, RotateMode.FastBeyond360)
                 .SetEase(easeType)
                 .OnComplete(() => {
                     //executes whenever Pawn reach target position
@@ -144,5 +150,7 @@ public class DiceController : MonoBehaviour
     public void ResetDice()
     {
         Set_Dice_Type(false);
+        Dice_6.transform.localScale = Vector3.one;
+        Dice_10.transform.localScale = Vector3.one * 0.1f;
     }
 }

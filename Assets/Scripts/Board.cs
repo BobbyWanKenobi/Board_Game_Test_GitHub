@@ -27,7 +27,7 @@ public class Board : MonoBehaviour
     {
         for (int i = 0; i < boardFields.Count; i++)
         {
-            boardFields[i].FieldNo = i;
+            boardFields[i].Set_Field_Number(i);
         }
     }
 

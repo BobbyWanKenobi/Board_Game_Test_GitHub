@@ -40,17 +40,17 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         UImanager.newGame += RestartGame;
-        MovePawn.gameOver += Game_Over;
-        MovePawn.nextPlayer += Next_Player;
-        DiceController.diceDone += Move_Pawn;
+        MovePlayer.gameOver += Game_Over;
+        MovePlayer.nextPlayer += Next_Player;
+        DiceController.diceDone += Move_Player;
     }
 
     private void OnDisable()
     {
         UImanager.newGame -= RestartGame;
-        MovePawn.gameOver -= Game_Over;
-        MovePawn.nextPlayer -= Next_Player;
-        DiceController.diceDone -= Move_Pawn;
+        MovePlayer.gameOver -= Game_Over;
+        MovePlayer.nextPlayer -= Next_Player;
+        DiceController.diceDone -= Move_Player;
     }
 
 
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
         foreach (var player in Players)
         {
-            player.GetComponent<MovePawn>().ResetPlayer();
+            player.GetComponent<MovePlayer>().ResetPlayer();
             player.GetComponent<Player>().ResetPlayer();
         }
 
@@ -93,10 +93,12 @@ public class GameManager : MonoBehaviour
         //Call Dice button for player or do auto dice roll for AI
         if (Players[ActivePlayer].GetComponent<Player>().IsAI == false)
         {
+            UImanager.inst.Set_Game_Message("YOUR MOVE");
             Show_Play_UI();
         }
         else
         {
+            UImanager.inst.Set_Game_Message("AI MOVE");
             Roll_Dice(Random.Range(2, 4));
         }
     }
@@ -106,15 +108,15 @@ public class GameManager : MonoBehaviour
     public void Roll_Dice(float delay)
     {
         DEBUGger.inst?.Set_Debug_Left("GameManager.Roll_Dice, delay: " + delay, Color.green);
-        StartCoroutine(DiceController.inst.Set_Dice_Rotation_Delayed(GetComponent<RandomGenerator>().GetRandomInt(1, 6), delay));
+        StartCoroutine(DiceController.inst.Set_Dice_Rotation_Delayed(GetComponent<RandomGenerator>().GetRandomInt(1, 3), delay));
     }
 
     /// <summary>Move Player, Called form diceDone event</summary>
     /// <remarks></remarks>
-    void Move_Pawn(int val)
+    void Move_Player(int val)
     {
         DEBUGger.inst?.Set_Debug_Left("GameManager.Move_Pawn, val: " + val, Color.green);
-        Players[ActivePlayer].GetComponent<MovePawn>().Set_Player_Move(val);
+        Players[ActivePlayer].GetComponent<MovePlayer>().Set_Player_Move(val);
     }
 
     /// <summary>Shows Roll Dice button for player and hides it for AI</summary>
@@ -136,5 +138,15 @@ public class GameManager : MonoBehaviour
     public void Game_Over()
     {
         DEBUGger.inst?.Set_Debug_Left("GameManager.Game_Over", Color.green);
+        if (Players[ActivePlayer].GetComponent<Player>().IsAI == false)
+        {
+            UImanager.inst.Set_Game_Message("YOU WON");
+        }
+        else
+        {
+            UImanager.inst.Set_Game_Message("AI WON");
+        }
+
+        UImanager.inst.Show_Button_Another_Game(true);
     }
 }
