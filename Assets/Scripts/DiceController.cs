@@ -51,18 +51,6 @@ public class DiceController : MonoBehaviour
             Destroy(this.gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /// <summary>Set Dice Type 1-6 or 5-10</summary>
     /// <remarks></remarks>
     public void Set_Dice_Type(bool dice_5_10)
@@ -102,32 +90,6 @@ public class DiceController : MonoBehaviour
                 });
             Dice_10.transform.DOScale(Vector3.one * 0.1f, duration);
         }
-
-        //// keep track of when the scaling started, when it should finish, and how long it has been running
-        //var startTime = Time.time;
-        //var endTime = Time.time + duration;
-        //var elapsedTime = 0f;
-
-        //// loop repeatedly until the previously calculated end time
-        //while (Time.time <= endTime )
-        //{
-        //    elapsedTime = Time.time - startTime; // update the elapsed time
-        //    var percentage = 1 / (duration / elapsedTime); // calculate how far along the timeline we are
-        //    if (Dice_5_10) // if we are fading out
-        //    {
-        //        Dice_6.transform.localScale = Vector3.one * percentage;
-        //        Dice_10.transform.localScale = Vector3.one * (1 - percentage);
-        //    }
-        //    else // if we are fading in/up
-        //    {
-        //        Dice_6.transform.localScale = Vector3.one * (1 - percentage);
-        //        Dice_10.transform.localScale = Vector3.one * percentage;
-        //    }
-
-        //    yield return new WaitForEndOfFrame(); // wait for the next frame before continuing the loop
-        //}
-
-        //DiceReady = true;
     }
 
     /// <summary>Set dice number with Delay</summary>
@@ -149,9 +111,11 @@ public class DiceController : MonoBehaviour
             UImanager.inst.Show_Button_RollDice(false);
 
         Debug.Log("Requested result: " + diceVal);
-
+        
+        //Adds randomnes to the dice rotation 
         transform.rotation = new Quaternion(Random.Range(-3f, 3f), Random.Range(-3f, 3f), Random.Range(-3f, 3f), 0);
 
+        //Rotates dice to desired result
         transform.DOLocalRotate(diceRotAngles[diceVal - 1] + new Vector3(1080,0,0), 3f, RotateMode.FastBeyond360)
                 .SetEase(easeType)
                 .OnComplete(() => {
@@ -164,12 +128,15 @@ public class DiceController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
+        //Increment result for bigger dice
         if (Dice_5_10)
             diceVal += 4;
 
         diceDone(diceVal);
     }
 
+    /// <summary>Reset dices to start condition</summary>
+    /// <remarks></remarks>
     public void ResetDice()
     {
         Set_Dice_Type(false);

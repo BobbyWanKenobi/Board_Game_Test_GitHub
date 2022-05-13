@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
         DiceController.diceDone -= Move_Player;
     }
 
-
     /// <summary>Resets Game and start a new one</summary>
     /// <remarks></remarks>
     public void RestartGame()
@@ -60,6 +59,10 @@ public class GameManager : MonoBehaviour
             player.GetComponent<Player>().ResetPlayer();
         }
 
+        //Necessary to sync player and AI
+        Players[0].GetComponent<Player>().TurnsNo = 1;
+
+        UImanager.inst.Set_Game_Message("YOUR MOVE");
         DiceController.inst.ResetDice();
     }
 

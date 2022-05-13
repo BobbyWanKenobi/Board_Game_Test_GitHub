@@ -14,7 +14,7 @@ public class UImanager : MonoBehaviour
     public static UImanager inst = null;
 
     [Header("References")]
-    [SerializeField] GameObject Panel_StartGame;
+    [SerializeField] GameObject Canvas_Menu;
     [SerializeField] GameObject Panel_HUD;
     [SerializeField] GameObject Button_RollDice;
     [SerializeField] GameObject Button_Another_Game;
@@ -37,26 +37,55 @@ public class UImanager : MonoBehaviour
     void Start()
     {
         ResetUI();
+        Canvas_Menu.SetActive(true);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKey("escape"))
+        {
+            EscapePressed();
+        }
     }
 
     /// <summary>Button Player VS AI pressed</summary>
     /// <remarks></remarks>
     public void Button_Player_vs_AI_Pressed()
     {
-        Show_Panel_StartGame(false);
+        Show_Canvas_Menu(false);
         Show_Panel_HUD(true);
         Show_Button_RollDice(true);
         if (newGame != null)
             newGame();
     }
 
+    /// <summary>Button Player VS AI pressed</summary>
+    /// <remarks></remarks>
+    public void Button_Continue_Pressed()
+    {
+        //returns to game in progres
+        if (GameManager.inst.Players[0].GetComponent<MovePlayer>().currentPos > 0)
+            Canvas_Menu.SetActive(false);
+        else
+            Button_Player_vs_AI_Pressed();
+    }
+
     /// <summary>Shows Hice Start Game panel</summary>
     /// <remarks></remarks>
-    public void Show_Panel_StartGame(bool active)
+    public void Show_Canvas_Menu(bool active)
     {
-        Panel_StartGame.SetActive(active);
+        Canvas_Menu.SetActive(active);
         Show_Panel_HUD(false);
         ResetUI();
+    }
+
+    /// <summary>Shows Hice Start Game panel</summary>
+    /// <remarks></remarks>
+    public void EscapePressed()
+    {
+        if (Canvas_Menu.activeInHierarchy == false)
+            Canvas_Menu.SetActive(true);
     }
 
     /// <summary>Shows Game Hud</summary>
@@ -99,5 +128,16 @@ public class UImanager : MonoBehaviour
         Set_Game_Message("");
         Show_Button_Another_Game(false);
         Show_Button_RollDice(false);
+    }
+
+    /// <summary>Quit Game</summary>
+    /// <remarks></remarks>
+    public void Button_Quit_Pressed()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+         Application.Quit();
+#endif
     }
 }

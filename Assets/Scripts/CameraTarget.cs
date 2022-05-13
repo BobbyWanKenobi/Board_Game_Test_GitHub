@@ -6,7 +6,7 @@ public class CameraTarget : MonoBehaviour
 {
     /*---------------------------------------------------------------------------------------------
     *  Attached to CameraTarget
-    *  Manages Camera Target motion and rotation
+    *  Manages Camera tracking
     *--------------------------------------------------------------------------------------------*/
 
     public static GameManager inst = null;

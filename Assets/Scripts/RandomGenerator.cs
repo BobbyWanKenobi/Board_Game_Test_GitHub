@@ -9,6 +9,8 @@ public class RandomGenerator : MonoBehaviour
     *  generates random number
     *--------------------------------------------------------------------------------------------*/
 
+    /// <summary>generates random int in range.</summary>
+    /// <remarks>Seed is decided bu monet of call</remarks>
     public int GetRandomInt(int min, int max)
     {
         Random.InitState(System.DateTime.Now.Millisecond);

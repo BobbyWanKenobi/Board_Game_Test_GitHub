@@ -40,7 +40,7 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &-7884631542660840788
+--- !u!114 &-7070857973958045501
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,13 +58,13 @@ MonoBehaviour:
     m_Value: 1
   gaussianStart:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 20
   gaussianEnd:
     m_OverrideState: 1
     m_Value: 50
   gaussianMaxRadius:
     m_OverrideState: 0
-    m_Value: 0.977
+    m_Value: 1
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
@@ -130,8 +130,8 @@ MonoBehaviour:
   - {fileID: 849379129802519247}
   - {fileID: -7893295128165547882}
   - {fileID: -7011558710299706105}
-  - {fileID: -7884631542660840788}
   - {fileID: 7203148476492317957}
+  - {fileID: -7070857973958045501}
 --- !u!114 &849379129802519247
 MonoBehaviour:
   m_ObjectHideFlags: 3

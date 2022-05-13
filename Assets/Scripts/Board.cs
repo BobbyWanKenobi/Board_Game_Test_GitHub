@@ -25,6 +25,7 @@ public class Board : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Looks for game field and adds them to the list
         int x = 0;
         Transform[] allChildren = GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
@@ -32,26 +33,13 @@ public class Board : MonoBehaviour
             if (child.GetComponent<BoardField>() != null)
             {
                 boardFields.Add(child.GetComponent<BoardField>());
-                child.GetComponent<BoardField>().Set_Field_Number(x);
+                child.GetComponent<BoardField>().Set_Field(x);
                 x++;
             }
         }
 
-        //for (int i = 0; i < boardFields.Count; i++)
-        //{
-        //    boardFields[i].Set_Field_Number(i);
-        //}
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void Reset()
-    {
-        
+        boardFields[0].GetComponent<BoardField>().Set_Field("START");
+        boardFields[boardFields.Count - 1].GetComponent<BoardField>().Set_Field("FINISH");
     }
 
     /// <summary>Get BoardFild by naumber</summary>

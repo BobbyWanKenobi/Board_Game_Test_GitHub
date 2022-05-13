@@ -6,19 +6,19 @@ using DG.Tweening;
 public class MovePlayer : MonoBehaviour
 {
     /*---------------------------------------------------------------------------------------------
-    *  Attached to Player.
+    *  Attached to Player or AI.
     *  Manage Player motion
     *--------------------------------------------------------------------------------------------*/
 
     [Header("References")]
     [SerializeField] GameObject Pawn;
-    [SerializeField] GameObject CamTarget;
+    //[SerializeField] GameObject CamTarget;
 
     [Header("Variables")]
     [SerializeField] Ease easeType;
     [SerializeField] float Single_Move_Duration = 0.6f;
     [Space]
-    int currentPos = 0;
+    public int currentPos = 0;
     int nextPos = 0;
     int targetPos;
     bool moveINProgress = false;
@@ -30,13 +30,8 @@ public class MovePlayer : MonoBehaviour
     public static event GameOver gameOver;
     public delegate void NextPlayer();
     public static event NextPlayer nextPlayer;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public delegate void StepDone();
+    public static event StepDone stepDone;
 
     // Update is called once per frame
     void Update()
@@ -99,9 +94,6 @@ public class MovePlayer : MonoBehaviour
         //Get next Board field position
         Vector3 targetPosition = Board.inst.Get_Field_Pos(nextPos);
 
-        //set CamTarget
-        Orient_CamTarget(targetPosition);
-
         transform.DOMove(targetPosition, Single_Move_Duration)
                 .SetEase(easeType)
                 .OnComplete(() => {
@@ -110,16 +102,12 @@ public class MovePlayer : MonoBehaviour
                 });
     }
 
-    void Orient_CamTarget(Vector3 targetPosition)
-    {
-        CamTarget.transform.DOLookAt(targetPosition, Single_Move_Duration);
-    }
-
     void Process_Step_End()
     {
         currentPos = nextPos;
-        //if (currentPos < targetPos)
-        //    nextPos++;
+
+        //Step Sound
+        stepDone();
 
         //Checks for Game Over
         if (currentPos >= fieldsCount - 1)
@@ -160,7 +148,5 @@ public class MovePlayer : MonoBehaviour
             pos_Z_shift = -0.2f;
         else
             pos_Z_shift = 0.2f;
-
-        Orient_CamTarget(Board.inst.Get_Field_Pos(1));
     }
 }

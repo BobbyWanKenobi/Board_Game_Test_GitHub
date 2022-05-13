@@ -6,9 +6,7 @@ public class Random_Light : MonoBehaviour
 {
     //**MANAGE Lights Flicker*//
     //**ATTACHED TO Any Light*//
-    /*NOTES:
-     * 
-     */
+    /*NOTES:*/
 
     [SerializeField] float Light_Intensity = 1;
     [SerializeField] float Light_Flicker_percent = 0.2f;
