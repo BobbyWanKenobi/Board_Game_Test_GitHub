@@ -87,11 +87,17 @@ public class UImanager : MonoBehaviour
         Text_GameMessage.text = msg;
     }
 
+    public void Toggle_FullScreen()
+    {
+        Screen.fullScreen = !Screen.fullScreen;
+    }
+
     /// <summary>Resets UI</summary>
     /// <remarks></remarks>
     public void ResetUI()
     {
         Set_Game_Message("");
         Show_Button_Another_Game(false);
+        Show_Button_RollDice(false);
     }
 }

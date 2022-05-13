@@ -67,44 +67,67 @@ public class DiceController : MonoBehaviour
     /// <remarks></remarks>
     public void Set_Dice_Type(bool dice_5_10)
     {
-        DEBUGger.inst?.Set_Debug_Left("DiceController. Set_Dice_Type, Dice_5_10: " + Dice_5_10 + "  > dice_5_10: " + dice_5_10, Color.blue);
+        DEBUGger.inst?.Set_Debug_Right("DiceController. Set_Dice_Type, Dice_5_10: " + Dice_5_10 + "  > dice_5_10: " + dice_5_10 + "  > ActivePlayer: " + GameManager.inst.ActivePlayer, Color.blue);
         if (Dice_5_10 != dice_5_10)
             StartCoroutine(Swap_Dice(1.0f, 0.1f));
         Dice_5_10 = dice_5_10;
     }
 
+    /// <summary>Change dices on every 3 moves</summary>
+    /// <remarks></remarks>
     IEnumerator Swap_Dice(float duration, float delay = 0)
     {
-        DEBUGger.inst?.Set_Debug_Left("DiceController. Swap_Dice, Dice_5_10: " + Dice_5_10, Color.blue);
+        DEBUGger.inst?.Set_Debug_Right("DiceController. Swap_Dice, Dice_5_10: " + Dice_5_10 + "  > ActivePlayer: " + GameManager.inst.ActivePlayer, Color.blue);
         DiceReady = false;
 
         yield return new WaitForSeconds(delay);
 
-        // keep track of when the scaling started, when it should finish, and how long it has been running
-        var startTime = Time.time;
-        var endTime = Time.time + duration;
-        var elapsedTime = 0f;
-
-        // loop repeatedly until the previously calculated end time
-        while (Time.time <= endTime )
+        if (Dice_5_10)
         {
-            elapsedTime = Time.time - startTime; // update the elapsed time
-            var percentage = 1 / (duration / elapsedTime); // calculate how far along the timeline we are
-            if (Dice_5_10) // if we are fading out
-            {
-                Dice_6.transform.localScale = Vector3.one * percentage;
-                Dice_10.transform.localScale = Vector3.one * (1 - percentage);
-            }
-            else // if we are fading in/up
-            {
-                Dice_6.transform.localScale = Vector3.one * (1 - percentage);
-                Dice_10.transform.localScale = Vector3.one * percentage;
-            }
-
-            yield return new WaitForEndOfFrame(); // wait for the next frame before continuing the loop
+            Dice_10.transform.DOScale(Vector3.one, duration)
+                .SetEase(easeType)
+                .OnComplete(() => {
+                    //executes whenever Pawn reach target position
+                    DiceReady = true;
+                });
+            Dice_6.transform.DOScale(Vector3.one * 0.1f, duration);
+        }
+        else
+        {
+            Dice_6.transform.DOScale(Vector3.one, duration)
+                .SetEase(easeType)
+                .OnComplete(() => {
+                    //executes whenever Pawn reach target position
+                    DiceReady = true;
+                });
+            Dice_10.transform.DOScale(Vector3.one * 0.1f, duration);
         }
 
-        DiceReady = true;
+        //// keep track of when the scaling started, when it should finish, and how long it has been running
+        //var startTime = Time.time;
+        //var endTime = Time.time + duration;
+        //var elapsedTime = 0f;
+
+        //// loop repeatedly until the previously calculated end time
+        //while (Time.time <= endTime )
+        //{
+        //    elapsedTime = Time.time - startTime; // update the elapsed time
+        //    var percentage = 1 / (duration / elapsedTime); // calculate how far along the timeline we are
+        //    if (Dice_5_10) // if we are fading out
+        //    {
+        //        Dice_6.transform.localScale = Vector3.one * percentage;
+        //        Dice_10.transform.localScale = Vector3.one * (1 - percentage);
+        //    }
+        //    else // if we are fading in/up
+        //    {
+        //        Dice_6.transform.localScale = Vector3.one * (1 - percentage);
+        //        Dice_10.transform.localScale = Vector3.one * percentage;
+        //    }
+
+        //    yield return new WaitForEndOfFrame(); // wait for the next frame before continuing the loop
+        //}
+
+        //DiceReady = true;
     }
 
     /// <summary>Set dice number with Delay</summary>

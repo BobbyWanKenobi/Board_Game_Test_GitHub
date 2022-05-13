@@ -12,6 +12,7 @@ public class MovePlayer : MonoBehaviour
 
     [Header("References")]
     [SerializeField] GameObject Pawn;
+    [SerializeField] GameObject CamTarget;
 
     [Header("Variables")]
     [SerializeField] Ease easeType;
@@ -95,8 +96,11 @@ public class MovePlayer : MonoBehaviour
         DEBUGger.inst?.Set_Debug_Left("Set_Pawn_Target, Next_Move nextPos: " + nextPos, Color.yellow);
         moveINProgress = true;
 
-        //nextPos = currentPos++;
+        //Get next Board field position
         Vector3 targetPosition = Board.inst.Get_Field_Pos(nextPos);
+
+        //set CamTarget
+        Orient_CamTarget(targetPosition);
 
         transform.DOMove(targetPosition, Single_Move_Duration)
                 .SetEase(easeType)
@@ -104,6 +108,11 @@ public class MovePlayer : MonoBehaviour
                     //executes whenever Pawn reach target position
                     Process_Step_End();
                 });
+    }
+
+    void Orient_CamTarget(Vector3 targetPosition)
+    {
+        CamTarget.transform.DOLookAt(targetPosition, Single_Move_Duration);
     }
 
     void Process_Step_End()
@@ -151,5 +160,7 @@ public class MovePlayer : MonoBehaviour
             pos_Z_shift = -0.2f;
         else
             pos_Z_shift = 0.2f;
+
+        Orient_CamTarget(Board.inst.Get_Field_Pos(1));
     }
 }
